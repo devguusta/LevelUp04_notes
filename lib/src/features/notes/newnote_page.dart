@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
+import 'package:notas/src/database/notes_database.dart';
 import 'package:notas/src/shared/constants/app_colors.dart';
+import 'package:notas/src/shared/models/note_model.dart';
+import 'package:notas/src/shared/widgets/note_form.dart';
 
 class NewNotePage extends StatefulWidget {
-  const NewNotePage({Key? key}) : super(key: key);
+  final Note? note;
+  const NewNotePage({
+    Key? key,
+    this.note,
+  }) : super(key: key);
 
   @override
   _NewNotePageState createState() => _NewNotePageState();
 }
 
 class _NewNotePageState extends State<NewNotePage> {
-  TextEditingController _titleInputController = TextEditingController();
-  TextEditingController _descriptionInputController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late bool isImportant;
+  late int number;
+  late String title;
+  late String description;
+  // TextEditingController _titleInputController = TextEditingController();
+  // TextEditingController _descriptionInputController = TextEditingController();
+
   late DropDownItemData _value = DropDownItemData(
     color: AppColors.rosa,
     value: "rosa",
@@ -44,6 +56,11 @@ class _NewNotePageState extends State<NewNotePage> {
   @override
   void initState() {
     _value = list[0];
+    isImportant = widget.note?.isImportant ?? false;
+    number = widget.note?.number ?? 0;
+    title = widget.note?.title ?? '';
+    description = widget.note?.description ?? '';
+
     super.initState();
   }
 
@@ -61,110 +78,80 @@ class _NewNotePageState extends State<NewNotePage> {
         children: [
           SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.all(28.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _titleInputController,
-                          decoration: InputDecoration(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(28.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Expanded(
+                          child: NoteFormWidget(
                             hintText: "Título",
-                            hintStyle: TextStyle(
-                              fontFamily: "Roboto",
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16.0,
-                              letterSpacing: 0.15,
-                              color: Colors.black.withOpacity(0.54),
-                            ),
-                            labelStyle: TextStyle(
-                              fontFamily: "Roboto",
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16.0,
-                              letterSpacing: 0.15,
-                              color: Colors.black.withOpacity(0.54),
-                            ),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            focusedErrorBorder: InputBorder.none,
+                            title: title,
+                            onChangedTitle: (title) => setState(() {
+                              this.title = title;
+                            }),
                           ),
                         ),
-                      ),
-                      DropdownButton(
-                        underline: Container(),
-                        onChanged: (value) {
-                          setState(() {
-                            _value = value as DropDownItemData;
-                          });
-                        },
-                        value: _value,
-                        selectedItemBuilder: (BuildContext context) {
-                          return list.map<Widget>((DropDownItemData item) {
-                            return Center(
-                              child: Container(
-                                height: 18.0,
-                                width: 18.0,
-                                decoration: BoxDecoration(
-                                  color: _value.color,
-                                  shape: BoxShape.circle,
+                        DropdownButton(
+                          underline: Container(),
+                          onChanged: (value) {
+                            setState(() {
+                              _value = value as DropDownItemData;
+                            });
+                          },
+                          value: _value,
+                          selectedItemBuilder: (BuildContext context) {
+                            return list.map<Widget>((DropDownItemData item) {
+                              return Center(
+                                child: Container(
+                                  height: 18.0,
+                                  width: 18.0,
+                                  decoration: BoxDecoration(
+                                    color: _value.color,
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }).toList();
-                        },
-                        focusColor: Colors.transparent,
-                        items: list
-                            .map(
-                              (e) => DropdownMenuItem(
-                                value: e,
-                                child: Center(
-                                  child: Container(
-                                    height: 18.0,
-                                    width: 18.0,
-                                    decoration: BoxDecoration(
-                                      color: e.color,
-                                      shape: BoxShape.circle,
+                              );
+                            }).toList();
+                          },
+                          focusColor: Colors.transparent,
+                          items: list
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Center(
+                                    child: Container(
+                                      height: 18.0,
+                                      width: 18.0,
+                                      decoration: BoxDecoration(
+                                        color: e.color,
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                  TextField(
-                    controller: _descriptionInputController,
-                    maxLines: null,
-                    minLines: null,
-                    decoration: InputDecoration(
-                      hintText: "Digite algo",
-                      hintStyle: TextStyle(
-                        fontFamily: "Roboto",
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 0.15,
-                        color: Colors.black.withOpacity(0.54),
-                      ),
-                      border: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 40.0,
-                  ),
-                ],
+                    NoteFormWidget(
+                      hintText: 'Digite algo',
+                      description: description,
+                      onChangedDescription: (description) => setState(() {
+                        this.description = description;
+                      }),
+                    ),
+                    SizedBox(
+                      height: 40.0,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -173,7 +160,7 @@ class _NewNotePageState extends State<NewNotePage> {
             child: Align(
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: addOrUpdateNote,
                 child: Text("Salvar",
                     style: TextStyle(
                         fontFamily: "Roboto", fontWeight: FontWeight.w500)),
@@ -241,6 +228,45 @@ class _NewNotePageState extends State<NewNotePage> {
         ],
       ),
     );
+  }
+
+  void addOrUpdateNote() async {
+    final isValid = _formKey.currentState!.validate();
+
+    if (isValid) {
+      final isUpdating = widget.note != null;
+
+      if (isUpdating) {
+        await updateNote();
+      } else {
+        await addNote();
+      }
+
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future updateNote() async {
+    final note = widget.note!.copy(
+      isImportant: isImportant,
+      number: number,
+      title: title,
+      description: description,
+    );
+
+    await NotesDatabase.instance.update(note);
+  }
+
+  Future addNote() async {
+    final note = Note(
+      title: title,
+      isImportant: true,
+      number: number,
+      description: description,
+      createdTime: DateTime.now(),
+    );
+
+    await NotesDatabase.instance.create(note);
   }
 }
 

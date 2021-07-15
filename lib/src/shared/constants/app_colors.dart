@@ -22,4 +22,17 @@ class AppColors {
     ],
     transform: GradientRotation((-34 * pi) / 180),
   );
+  static const blueGradientAppBar = LinearGradient(
+    colors: <Color>[
+      ciano,
+      roxo,
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [
+      -0.5,
+      0.8,
+    ],
+    transform: GradientRotation((-34 * pi) / 180),
+  );
 }
