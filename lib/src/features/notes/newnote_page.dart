@@ -29,6 +29,16 @@ class _NewNotePageState extends State<NewNotePage> {
     color: AppColors.rosa,
     value: "rosa",
   );
+  @override
+  void initState() {
+    _value = list[0];
+    isImportant = widget.note?.isImportant ?? false;
+    number = widget.note?.number ?? 0;
+    title = widget.note?.title ?? '';
+    description = widget.note?.description ?? '';
+
+    super.initState();
+  }
 
   final List<DropDownItemData> list = [
     DropDownItemData(
@@ -52,17 +62,6 @@ class _NewNotePageState extends State<NewNotePage> {
       value: "amarelo",
     ),
   ];
-
-  @override
-  void initState() {
-    _value = list[0];
-    isImportant = widget.note?.isImportant ?? false;
-    number = widget.note?.number ?? 0;
-    title = widget.note?.title ?? '';
-    description = widget.note?.description ?? '';
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +89,12 @@ class _NewNotePageState extends State<NewNotePage> {
                       children: [
                         Expanded(
                           child: NoteFormWidget(
+                            initialValue: title,
                             hintText: "Título",
                             title: title,
                             onChangedTitle: (title) => setState(() {
                               this.title = title;
+                              print("title");
                             }),
                           ),
                         ),
@@ -142,6 +143,7 @@ class _NewNotePageState extends State<NewNotePage> {
                     ),
                     NoteFormWidget(
                       hintText: 'Digite algo',
+                      initialValue: description,
                       description: description,
                       onChangedDescription: (description) => setState(() {
                         this.description = description;

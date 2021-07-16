@@ -6,6 +6,7 @@ class NoteFormWidget extends StatelessWidget {
   final String? title;
   final String? description;
   final String hintText;
+  final String initialValue;
 
   final TextEditingController? controller;
   final ValueChanged<bool>? onChangedImportant;
@@ -19,6 +20,7 @@ class NoteFormWidget extends StatelessWidget {
     this.title,
     this.description,
     required this.hintText,
+    required this.initialValue,
     this.controller,
     this.onChangedImportant,
     this.onChangedNumber,
@@ -29,7 +31,7 @@ class NoteFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: title,
+      initialValue: initialValue,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(

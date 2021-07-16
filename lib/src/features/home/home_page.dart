@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : notes.isEmpty
               ? Stack(
                   children: [
@@ -182,27 +182,31 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: StaggeredGridView.countBuilder(
-          padding: EdgeInsets.all(8),
-          itemCount: notes.length,
-          staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-          crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          itemBuilder: (context, index) {
-            final note = notes[index];
+        body: Flex(direction: Axis.vertical, children: [
+          Expanded(
+            child: StaggeredGridView.countBuilder(
+              padding: EdgeInsets.all(8),
+              itemCount: notes.length,
+              staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+              crossAxisCount: 4,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              itemBuilder: (context, index) {
+                final note = notes[index];
 
-            return GestureDetector(
-              onTap: () async {
-                await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NoteDetailPage(noteId: note.id!),
-                ));
+                return GestureDetector(
+                  onTap: () async {
+                    await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => NoteDetailPage(noteId: note.id!),
+                    ));
 
-                refreshNotes();
+                    refreshNotes();
+                  },
+                  child: NoteCardWidget(note: note, index: index),
+                );
               },
-              child: NoteCardWidget(note: note, index: index),
-            );
-          },
-        ),
+            ),
+          ),
+        ]),
       );
 }
