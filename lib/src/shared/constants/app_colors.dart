@@ -30,9 +30,9 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     stops: [
-      -0.5,
-      0.8,
+      0.1,
+      0.58,
     ],
-    transform: GradientRotation((-34 * pi) / 180),
+    transform: GradientRotation((60 * pi) / 180),
   );
 }

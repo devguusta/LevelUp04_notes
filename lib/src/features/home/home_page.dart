@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
           preferredSize: Size.fromHeight(86),
           child: Container(
             decoration: BoxDecoration(
-              gradient: AppColors.blueGradient,
+              gradient: AppColors.blueGradientAppBar,
             ),
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0),
@@ -182,31 +182,68 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: Flex(direction: Axis.vertical, children: [
-          Expanded(
-            child: StaggeredGridView.countBuilder(
-              padding: EdgeInsets.all(8),
-              itemCount: notes.length,
-              staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-              crossAxisCount: 4,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              itemBuilder: (context, index) {
-                final note = notes[index];
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 50.0,
+                  right: 50,
+                  top: 18,
+                  bottom: 26,
+                ),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Pesquisar",
+                    hintStyle: TextStyle(
+                      fontFamily: "Roboto",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.15,
+                      color: Colors.black.withOpacity(0.54),
+                    ),
+                    suffixIcon: Icon(
+                      Icons.search_outlined,
+                      color: Colors.black.withOpacity(0.54),
+                    ),
+                    border: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                  ),
+                ),
+              ),
+              StaggeredGridView.countBuilder(
+                shrinkWrap: true,
+                padding: EdgeInsets.all(8),
+                itemCount: notes.length,
+                staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+                crossAxisCount: 4,
+                mainAxisSpacing: 2,
+                crossAxisSpacing: 2,
+                itemBuilder: (context, index) {
+                  final note = notes[index];
 
-                return GestureDetector(
-                  onTap: () async {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NoteDetailPage(noteId: note.id!),
-                    ));
+                  return GestureDetector(
+                    onTap: () async {
+                      await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NoteDetailPage(noteId: note.id!),
+                      ));
 
-                    refreshNotes();
-                  },
-                  child: NoteCardWidget(note: note, index: index),
-                );
-              },
-            ),
+                      refreshNotes();
+                    },
+                    child: Column(
+                      children: [
+                        NoteCardWidget(note: note, index: index),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ]),
+        ),
       );
 }

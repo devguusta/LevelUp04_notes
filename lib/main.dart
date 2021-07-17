@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:notas/src/features/splash/splash_page.dart';
 

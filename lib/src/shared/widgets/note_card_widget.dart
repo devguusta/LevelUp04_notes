@@ -31,7 +31,9 @@ class NoteCardWidget extends StatelessWidget {
     return Card(
       color: Colors.grey.shade100,
       child: Container(
-        constraints: BoxConstraints(minHeight: minHeight),
+        constraints: BoxConstraints(
+          minHeight: minHeight,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,13 +46,13 @@ class NoteCardWidget extends StatelessWidget {
                   bottom: 0.0,
                 ),
                 child: Container(
-                  width: 150,
-                  height: 45,
+                  width: MediaQuery.of(context).size.width * 1,
+                  height: 50,
                   child: Padding(
                     padding:
                         const EdgeInsets.only(top: 12.0, bottom: 8, left: 10),
                     child: Text(
-                      note.title,
+                      "Não esquecer de",
                       style: TextStyle(
                         color: Color.fromRGBO(255, 255, 255, 1),
                         fontSize: 16,
@@ -69,40 +71,41 @@ class NoteCardWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    // mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
-                        padding: EdgeInsets.all(0.0),
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.date_range,
-                          color: Colors.black.withOpacity(0.54),
-                          size: 15,
-                        ),
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.all(0.0),
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.attach_file_outlined,
-                          color: Colors.black.withOpacity(0.54),
-                          size: 15,
-                        ),
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.all(0.0),
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.favorite_border,
-                          color: Colors.black.withOpacity(0.54),
-                          size: 15,
-                        ),
+                      Expanded(
+                        child: Stack(children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.only(left: 75.0),
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.attach_file_outlined,
+                                  color: Colors.black.withOpacity(0.54),
+                                  size: 15,
+                                ),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                padding: EdgeInsets.only(right: 20.0),
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.black.withOpacity(0.54),
+                                  size: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ]),
                       ),
                     ],
                   ),
                   Text(
-                    note.description,
+                    "Lorem ipsum dolor sit amet, consecter adipiscin elit, sed incididunt ut labore et dolore aliqua.",
                     maxLines: null,
                     style: TextStyle(
                       color: Color.fromRGBO(0, 0, 0, 0.54),
